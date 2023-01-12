@@ -2,7 +2,7 @@
 	$servidor='localhost';
 	$usuario='root';
 	$clave='';
-	$bd='bdsae911';
+	$bd='fletear';
 
 	$conexion=mysqli_connect($servidor,$usuario,$clave,$bd);
 	if (!$conexion) {

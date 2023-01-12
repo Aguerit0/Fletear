@@ -10,58 +10,36 @@
     header('Location: inicio.php');
   }
   if (isset($_POST['submit'])){
-    if (!isset($_POST['usuario']) && !isset($_POST['password']))
+    if (!isset($_POST['usuario']) && !isset($_POST['contraseña']))
     {
       $error = "Usuario o Contraseña invalidos";
     }else{
       // DEFINE USUSARIO Y Contraseña
       $usuario = $_POST['usuario'];
-      $password = $_POST['password'];
+      $contraseña = $_POST['contraseña'];
 
-      
+      //SQL1: SELECT COMPROBAR QUE EXISTA USUARIO
+      $sql1 = "SELECT * FROM usuario WHERE usuario='$usuario' AND contraseña='$contraseña' ";
+      $res1 = mysqli_query($conexion,$sql1);
+      if($row1 = $res1->fetch_assoc()){
+        //DECLARO VARIABLES DE SESSION
+        $_SESSION['usuario']=$row1['usuario'];
+        $_SESSION['rol']=$row1['rol'];
+        $_SESSION['idCliente']=$row1['idCliente'];
+        $idCliente = $_SESSION['idCliente'];
 
-      $sentenciaSQL=$bd_conex->prepare('SELECT idUsuario, usuario, rol FROM usuarios WHERE usuario=:usuario AND contraseña=:password');
-      $sentenciaSQL->bindParam(':usuario', $usuario);
-      $sentenciaSQL->bindParam(':password', $password);
-      $sentenciaSQL->execute();
-      $cuenta = $sentenciaSQL->fetch(PDO::FETCH_LAZY);
-
-      if($cuenta == true){
-        $_SESSION['usuario']=$cuenta['usuario'];
-        $_SESSION['rol']=$cuenta['rol'];
-        $_SESSION['id']=$cuenta['idUsuario'];
-
-        $sentenciaSQL=$bd_conex->prepare('SELECT nombre, apellido FROM personas WHERE idPersona =:id');
-        $sentenciaSQL->bindParam(':id', $_SESSION['id']);
-        $sentenciaSQL->execute();
-        $persona = $sentenciaSQL->fetch(PDO::FETCH_LAZY);
-        $_SESSION['nombre']=$persona['nombre'];
-        $_SESSION['apellido']=$persona['apellido'];
-
-        $sentenciaSQL=$bd_conex->prepare('SELECT idComisaria FROM `usuario-comisaria` WHERE idUsuario =:id');
-        $sentenciaSQL->bindParam(':id', $_SESSION['id']);
-        $sentenciaSQL->execute();
-        $usuComisaria = $sentenciaSQL->fetch(PDO::FETCH_LAZY);
-        $_SESSION['idComisaria']=$usuComisaria['idComisaria'];
-        
-        header('Location: inicio.php');
+        //SQL2: SELECT CLIENTE PARA VARIABLES DE SESSON
+        $sql2 = "SELECT * FROM cliente WHERE idCliente=$idCliente ";
+        $res2 = mysqli_query($conexion,$sql2);
+        if($row2 = $res2->fetch_assoc()){
+        //DECLARO VARIABLES DE SESSION
+          $_SESSION['nombreCliente']=$row2['nombreCliente'];
+          $_SESSION['apellidoCliente']=$row2['apellidoCliente'];  
+        }
       }else{
-        $error="Ususario o Contraseña son incorrectos";
+        $error = "Usuario o contraseñar invalidos";
       }
-      // Para proteger de Inyecciones SQL 
-      // $usuario = mysqli_real_escape_string($conexion,(strip_tags($usuario,ENT_QUOTES)));
-      // $password =  sha1($password);//Algoritmo de encriptacion de la contraseña http://php.net/manual/es/function.sha1.php
-
-      // $sql="SELECT * FROM usuarios WHERE ususario=$usuario AND contraseña = $password";
-      // $query=mysqli_query($conexion,$sql);
-      // $counter=mysqli_num_rows($query);
-
-      // if ($counter==1){
-      //   $_SESSION['usuario']=$usuario; // Iniciando la sesion
-      //   header("location: inicio-dashboard.php"); // Redireccionando a la pagina profile.php
-	    // }else {
-      //   $error = "El correo electrónico o la contraseña es inválida.";	
-      // }
+        header('Location: inicio.php');
     }
   }
 
@@ -96,10 +74,6 @@
   <link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
   <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
   <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
-
-  <!-- RECAPTCHA -->
-  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-
   <!-- Template Main CSS File -->
   <link href="assets/css/style.css" rel="stylesheet">
 </head>
@@ -112,7 +86,7 @@
       <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
         <div class="container">
           <div class="row justify-content-center">
-            <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
+            <div class="col-lg-4 col-md-9 d-flex flex-column align-items-center justify-content-center">
 
               <div class="d-flex justify-content-center py-4">
                 <a href="index.html" class="logo d-flex align-items-center w-auto">
@@ -133,7 +107,7 @@
                   <form class="row g-3 needs-validation" method="POST" novalidate>
 
                     <div class="col-12">
-                      <label for="yourUsername" class="form-label">Usuario</label>
+                      <label for="usuario" class="form-label">Usuario</label>
                       <div class="input-group has-validation">
                         <input type="text" name="usuario" class="form-control" id="usuario" required>
                         <div class="invalid-feedback">Por favor, introduzca su nombre de usuario.</div>
@@ -141,8 +115,8 @@
                     </div>
 
                     <div class="col-12">
-                      <label for="yourPassword" class="form-label">contraseña</label>
-                      <input type="password" name="password" class="form-control" id="password" required>
+                      <label for="contraseña" class="form-label">Contraseña</label>
+                      <input type="password" name="contraseña" class="form-control" id="contraseña" required>
                       <div class="invalid-feedback">Por favor, introduzca su contraseña.</div>
                     </div>
 
