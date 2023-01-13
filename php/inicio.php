@@ -48,10 +48,12 @@
   <?php include("./template/header.php")?>
 
   <!-- ======= Sidebar ======= -->
-  <?php  if($_SESSION['rol'] == 1){
-      include ("./template/admin-nav.php");
-    }else{
-      include ("./template/cliente-nav.php");
+  <?php  if($_SESSION['rol'] == 2){
+      include ("./template/adminNav.php");
+    }else if($_SESSION['rol'] == 1){
+      include ("./template/fleteroNav.php");
+    }else if($_SESSION['rol'] == 0){
+      include ("./template/clienteNav.php");
     }
   ?>
 

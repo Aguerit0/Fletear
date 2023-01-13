@@ -36,7 +36,7 @@
 
   
     if (isset($_POST['submit']) ) {
-
+        $contador = 0;
         if (!empty($_FILES)) {
             if (isset($_FILES['conductor']) OR isset($_FILES['carnet']) OR isset($_FILES['cedula']) OR isset($_FILES['seguro']) OR isset($_FILES['vehiculo']) OR isset($_FILES['titulo']) OR isset($_POST['tipoVehiculo'])) {
                 //IMAGEN CONDUCTOR
@@ -80,16 +80,31 @@
                 
                 //EXTRAIGO idCliente de Variables de sesion
                 $idCliente = $_SESSION['idCliente'];
+
+                //SQL3: SELECT PARA EXTRAER NUMERO DEL CONTADOR DE CANTIDAD DE VEHÍCULOS REGISTRADOS
+                $sql3 = "SELECT * FROM cliente c INNER JOIN fletero f WHERE c.idCliente='$idCliente' ";
+                $res3 = mysqli_query($conexion, $sql3);
+                if ($row3 = $res3->fetch_assoc()) {
+                  $contador = $row3['contador'];
+                  //++ VEHÍCULO REGISTRADO
+                  $contador++;
+                }
               
-                //SQL1: INSERT DATOS PARA FLETERO
-                $sql1 = "INSERT INTO fletero(conductor, carnetFletero, cedulaFletero, seguroFletero, vehiculoFletero, tituloFletero, tipoVehiculoFletero, fechaRegFletero, eliminado, idCliente) VALUES('$rutaConductor', '$rutaCarnet', '$rutaCedula', '$rutaSeguro', '$rutaVehiculo', '$rutaTitulo', '$tipoVehiculo', NOW(), '0', '$idCliente' ) ";
+                //SQL1: INSERT DATOS PARA TABLA FLETERO
+                $sql1 = "INSERT INTO fletero(conductor, carnetFletero, cedulaFletero, seguroFletero, vehiculoFletero, tituloFletero, tipoVehiculoFletero, fechaRegFletero, eliminado, contador, idCliente) VALUES('$rutaConductor', '$rutaCarnet', '$rutaCedula', '$rutaSeguro', '$rutaVehiculo', '$rutaTitulo', '$tipoVehiculo', NOW(), '0', '$contador' , '$idCliente' ) ";
                 $res1 = mysqli_query($conexion, $sql1);
                 if ($res1) {
+                  //SI LA CARGA FUÉ EXITOSA, EL CLIENTE PASA A SER FLETERO
+                  //POR LO TANTO UPDATE A LA TABLA USUARIO CAMBIANDOLE EL ROL
+                  //SQL2: UPDATE CAMBIO DE ROL TABLA CLIENTES
+                  $slq2 = "UPDATE usuario SET rol='1' WHERE idCliente='$idCliente' ";
+                  $res2 = mysqli_query($conexion, $slq2);
                 ?>
                     <script type="text/javascript">
                         alert('Imagen subida con exito !!');
                     </script>
                 <?php
+                header('location: inicio.php');
                 }else{
                   ?>
                       <script type="text/javascript">
@@ -164,10 +179,12 @@
   <?php include("template/header.php")?>
 
   <!-- ======= Sidebar ======= -->
-  <?php  if($_SESSION['rol'] == 1){
-      include ("template/admin-nav.php");
+  <?php   if($_SESSION['rol'] == 2){
+      include ("./template/adminNav.php");
+    }else if($_SESSION['rol']==1){
+      include ("./template/fleteroNav.php");
     }else{
-      include ("template/cliente-nav.php");
+      include ("./template/clienteNav.php");
     }
   ?>
 
@@ -195,7 +212,7 @@
                   <input type="hidden" class="form-control" name="imagenactual" id="imagenactual">
                   <div class="invalid-feedback">Subir archivo</div>
                 </div>
-                <img src="" width="150px" height="120px" id="imagenmuestra" alt="Foto del conductor">
+                <img src="" width="150px" height="120px" id="img" alt="Foto del conductor">
               </div>
               <div class="col-4">
                 <label for="carnet" class="form-label">Foto de Carnet de Conducir</label>
@@ -281,14 +298,14 @@
         var reader = new FileReader();
         reader.onload = function(e) {
           // Asignamos el atributo src a la tag de imagen
-          $('#imagenmuestra').attr('src', e.target.result);
+          $('#img').attr('src', e.target.result);
         }
         reader.readAsDataURL(input.files[0]);
       }
     }
 
     // El listener va asignado al input
-    $("#imagen").change(function() {
+    $("#img").change(function() {
       readURL(this);
     });
   </script>
