@@ -1264,25 +1264,45 @@ h6 {
 }
 
 /*--------------------------------------------------------------
-# Footer
+# PROFILE
 --------------------------------------------------------------*/
-.footer {
-  padding: 20px 0;
-  font-size: 14px;
-  transition: all 0.3s;
-  border-top: 1px solid #cddfff;
- 
-  
+.form-control:focus {
+  box-shadow: none;
+  border-color: #BA68C8
 }
 
-.footer .copyright {
-  text-align: center;
-  color: #012970;
+.profile-button {
+  background: rgb(99, 39, 120);
+  box-shadow: none;
+  border: none
 }
 
-.footer .credits {
-  padding-top: 5px;
-  text-align: center;
-  font-size: 13px;
-  color: #012970;
+.profile-button:hover {
+  background: #682773
+}
+
+.profile-button:focus {
+  background: #682773;
+  box-shadow: none
+}
+
+.profile-button:active {
+  background: #682773;
+  box-shadow: none
+}
+
+.back:hover {
+  color: #682773;
+  cursor: pointer
+}
+
+.labels {
+  font-size: 11px
+}
+
+.add-experience:hover {
+  background: #BA68C8;
+  color: #fff;
+  cursor: pointer;
+  border: solid 1px #BA68C8
 }

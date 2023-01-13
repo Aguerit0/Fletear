@@ -21,7 +21,7 @@
       </a>
     </li><!-- End Dashboard Nav -->
     <li class="nav-item">
-      <a class="nav-link " href="#">
+      <a class="nav-link " href="clienteRegistrarseFletero.php">
         <i class="bi bi-grid"></i>
         <span>Registrarse Como Fletero</span>
       </a>

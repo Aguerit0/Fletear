@@ -5,7 +5,7 @@
     <li class="nav-item">
       <a class="nav-link " href="inicio.php">
         <i class="bi bi-grid"></i>
-        <span>Inicio</span>
+        <span>ASDASDASDAS</span>
       </a>
     </li><!-- End Dashboard Nav -->
 
