@@ -38,7 +38,7 @@
     if (isset($_POST['submit']) ) {
         $contador = 0;
         if (!empty($_FILES)) {
-            if (isset($_FILES['conductor']) OR isset($_FILES['carnet']) OR isset($_FILES['cedula']) OR isset($_FILES['seguro']) OR isset($_FILES['vehiculo']) OR isset($_FILES['titulo']) OR isset($_POST['tipoVehiculo'])) {
+            if (isset($_FILES['conductor']) OR isset($_FILES['carnet']) OR isset($_FILES['cedula']) OR isset($_FILES['seguro']) OR isset($_FILES['vehiculo']) OR isset($_FILES['titulo']) OR isset($_POST['tipoVehiculo']) OR isset($_POST['colorVehiculoFletero']) OR isset($_POST['descripcionVehiculoFletero'])) {
                 //IMAGEN CONDUCTOR
                 $archivoConductor=$_FILES['conductor']['name'];
                 $archivoConductorTemp=$_FILES['conductor']['tmp_name'];
@@ -77,6 +77,12 @@
 
                 //TIPO DE VEHÍCULO: SELECT
                 $tipoVehiculo = $_POST['tipoVehiculo'];
+
+                //COLOR VEHICULO
+                $colorVehiculoFletero = $_POST['colorVehiculoFletero'];
+                $descripcionVehiculoFletero = $_POST['descripcionVehiculoFletero'];
+
+                //DESCRIPCIÓN VEHICULO
                 
                 //EXTRAIGO idCliente de Variables de sesion
                 $idCliente = $_SESSION['idCliente'];
@@ -91,7 +97,7 @@
                 }
               
                 //SQL1: INSERT DATOS PARA TABLA FLETERO
-                $sql1 = "INSERT INTO fletero(conductor, carnetFletero, cedulaFletero, seguroFletero, vehiculoFletero, tituloFletero, tipoVehiculoFletero, fechaRegFletero, eliminado, contador, idCliente) VALUES('$rutaConductor', '$rutaCarnet', '$rutaCedula', '$rutaSeguro', '$rutaVehiculo', '$rutaTitulo', '$tipoVehiculo', NOW(), '0', '$contador' , '$idCliente' ) ";
+                $sql1 = "INSERT INTO fletero(conductor, carnetFletero, cedulaFletero, seguroFletero, vehiculoFletero, tituloFletero, tipoVehiculoFletero, colorVehiculoFletero, descripcionVehiculoFletero, fechaRegFletero, eliminado, contador, idCliente) VALUES('$rutaConductor', '$rutaCarnet', '$rutaCedula', '$rutaSeguro', '$rutaVehiculo', '$rutaTitulo', '$tipoVehiculo', '$colorVehiculoFletero', '$descripcionVehiculoFletero' , NOW(), '0', '$contador' , '$idCliente' ) ";
                 $res1 = mysqli_query($conexion, $sql1);
                 if ($res1) {
                   //SI LA CARGA FUÉ EXITOSA, EL CLIENTE PASA A SER FLETERO
@@ -259,19 +265,33 @@
                 </div>
                 <img src="" width="150px" height="120px" id="imagenmuestra" alt="titulo">
               </div>
-              <div class="col-4 offset-3">
+              <div class="col-4">
                       <label for="tipoVehiculo" class="form-label">Tipo de Vehículo</label>
                       <select require name="tipoVehiculo" id="tipoVehiculo" class="form-select">
                       <option value="">Seleccionar</option>
                       <option value="0">Auto</option>
                       <option value="1">Camioneta</option>
                       <option value="2">Camion</option>
-                      <option value="2">Traffic</option>
-                      <option value="2">Moto</option>
-                      <option value="2">Bicicleta</option>
+                      <option value="3">Traffic</option>
+                      <option value="4">Moto</option>
+                      <option value="5">Bicicleta</option>
                       </select>
                       <div class="invalid-feedback">Ingrese su sexo.</div>
                 </div>
+                <div class="col-4">
+                <label for="color" class="form-label">Color del Vehículo</label>
+                <div class="input-group has-validation">
+                  <input type="text" class="form-control" name="color" id="color">
+                  <div class="invalid-feedback">Ingrese el color</div>
+                </div>
+              </div>
+              <div class="col-4">
+                <label for="descripcion" class="form-label">Descripción del Vehículo</label>
+                <div class="input-group has-validation">
+                  <input type="text" class="form-control" name="descripcion" id="descripcion">
+                  <div class="invalid-feedback">Ingrese una descripcion</div>
+                </div>
+              </div>
               
 
               <div class="col-12 d-flex align-items-center justify-content-center">

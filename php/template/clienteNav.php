@@ -9,7 +9,7 @@
       </a>
     </li><!-- End Dashboard Nav -->
     <li class="nav-item">
-      <a class="nav-link " href="#">
+      <a class="nav-link " href="clienteBuscarFletero.php">
         <i class="bi bi-grid"></i>
         <span>Buscar Fletero</span>
       </a>
@@ -34,7 +34,7 @@
     <li class="nav-heading">Paginas</li>
 
     <li class="nav-item">
-      <a class="nav-link collapsed" href="usuarios-perfil.php">
+      <a class="nav-link collapsed" href="perfil.php">
         <i class="bi bi-person"></i>
         <span>Perfil</span>
       </a>
