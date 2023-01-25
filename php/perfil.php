@@ -37,7 +37,7 @@
         $sexoCliente = 'No Binario';
       }
       $fechaRegCliente = $row1['fechaRegCliente'];
-      $eliminado = $row1['eliminado'];
+      $eliminadoCliente = $row1['eliminadoCliente'];
 
        //VARIABLE ROL
        $rolString = 'Cliente';
@@ -85,7 +85,7 @@
       $tituloFletero = $row1['tituloFletero'];
       $fechaRegFletero = $row1['fechaRegFletero'];
       $contador = $row1['contador'];
-      $eliminado = $row1['eliminado'];
+      $eliminadoFletero = $row1['eliminadoFletero'];
       
       //VARIABLE ROL
       $rolString = 'Fletero';
@@ -232,14 +232,14 @@
                 </div>
                 <div class="row mt-2">
                   <?php
-                    if ($eliminado==0) {
-                      $eliminado='ACTIVO';
+                    if ($eliminadoCliente==0) {
+                      $eliminadoCliente='ACTIVO';
                     }else{
-                      $eliminado='ELIMINADO';
+                      $eliminadoCliente='ELIMINADO';
                     }
                   ?>
                 <div class="col-md-6"><label class="labels">Fecha de Registro</label><input disabled type="date" class="form-control" value="<?php echo $fechaRegCliente ?>" placeholder="fecha registro"></div>
-                <div class="col-md-6"><label class="labels">Estado</label><input disabled type="text" <?php if($eliminado=='ACTIVO'){?> style="color: green" <?php echo '';}else{?> style="color: red" <?php echo '';} ?> class="form-control" value="<?php echo $eliminado ?>" placeholder="estado"></div>
+                <div class="col-md-6"><label class="labels">Estado</label><input disabled type="text" <?php if($eliminadoCliente=='ACTIVO'){?> style="color: green" <?php echo '';}else{?> style="color: red" <?php echo '';} ?> class="form-control" value="<?php echo $eliminadoCliente ?>" placeholder="estado"></div>
 
                 </div>
                 <?php
