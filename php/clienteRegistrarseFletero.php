@@ -1,18 +1,17 @@
 <?php
-  include ('conexion.php');
+include('conexion.php');
 
-  session_start();
-  // PREGUNTA SI HAY UN USUARIO REGISTRADO
-  if(!isset($_SESSION['usuario'])){
-    header('Location: inicioSesion.php');
-  }
+session_start();
+// PREGUNTA SI HAY UN USUARIO REGISTRADO
+if (!isset($_SESSION['usuario'])) {
+  header('Location: inicioSesion.php');
+}
 
-  $error = "";
-  $c=0;
+$error = "";
 
 
-  //AUTOMATIZAR SUBIDA DE IMAGENES
-  /* $vec=['conductor', 'carnet', 'cedula', 'seguro', 'vehiculo', 'titulo'];
+//AUTOMATIZAR SUBIDA DE IMAGENES
+/* $vec=['conductor', 'carnet', 'cedula', 'seguro', 'vehiculo', 'titulo'];
   for ($i=0; $i < sizeof($vec); $i++) { 
     //CARGA DE IMAGENES
     $nombreArchivo=$_FILES[$vec[$i]]['name'];
@@ -31,116 +30,119 @@
       </script>
   <?php
   } */
-  
 
+//EXTRAIGO idCliente de Variables de sesion
+$idCliente = $_SESSION['idCliente'];
 
-  
-    if (isset($_POST['submit']) ) {
-        $contador = 0;
-        if (!empty($_FILES)) {
-            if (isset($_FILES['conductor']) OR isset($_FILES['carnet']) OR isset($_FILES['cedula']) OR isset($_FILES['seguro']) OR isset($_FILES['vehiculo']) OR isset($_FILES['titulo']) OR isset($_POST['tipoVehiculo']) OR isset($_POST['colorVehiculoFletero']) OR isset($_POST['descripcionVehiculoFletero'])) {
-                //IMAGEN CONDUCTOR
-                $archivoConductor=$_FILES['conductor']['name'];
-                $archivoConductorTemp=$_FILES['conductor']['tmp_name'];
-                $rutaConductor="../imagenesFletero/conductor/".$archivoConductor;
-                move_uploaded_file($archivoConductorTemp, $rutaConductor);
+if (isset($_POST['submit'])) {
+  $contador = 0;
+  if (!empty($_FILES)) {
+    if (isset($_FILES['imagenFletero']) or isset($_FILES['carnetFletero']) or isset($_FILES['cedulaFletero']) or isset($_POST['descripcionFletero']) or isset($_FILES['vehiculoVehiculo']) or isset($_FILES['tituloVehiculo']) or isset($_FILES['seguroVehiculo']) or isset($_POST['tipoVehiculo']) or isset($_POST['colorVehiculo']) or isset($_POST['descripcionVehiculo'])) {
+      //IMAGEN CONDUCTOR
+      $archivoConductor = $_FILES['imagenFletero']['name'];
+      $archivoConductorTemp = $_FILES['imagenFletero']['tmp_name'];
+      $rutaConductor = "../imagenesFletero/imagenFletero/" . $archivoConductor;
+      move_uploaded_file($archivoConductorTemp, $rutaConductor);
 
-                //IMAGEN CARNET
-                $archivoCarnet=$_FILES['carnet']['name'];
-                $archivoCarnetTemp=$_FILES['carnet']['tmp_name'];
-                $rutaCarnet="../imagenesFletero/carnet/".$archivoCarnet;
-                move_uploaded_file($archivoCarnetTemp, $rutaCarnet);
+      //IMAGEN CARNET
+      $archivoCarnet = $_FILES['carnetFletero']['name'];
+      $archivoCarnetTemp = $_FILES['carnetFletero']['tmp_name'];
+      $rutaCarnet = "../imagenesFletero/carnetFletero/" . $archivoCarnet;
+      move_uploaded_file($archivoCarnetTemp, $rutaCarnet);
 
-                //IMAGEN CEDULA
-                $archivoCedula=$_FILES['cedula']['name'];
-                $archivoCedulaTemp=$_FILES['cedula']['tmp_name'];
-                $rutaCedula="../imagenesFletero/cedula/".$archivoCedula;
-                move_uploaded_file($archivoCedulaTemp, $rutaCedula);
+      //IMAGEN CEDULA
+      $archivoCedula = $_FILES['cedulaFletero']['name'];
+      $archivoCedulaTemp = $_FILES['cedulaFletero']['tmp_name'];
+      $rutaCedula = "../imagenesFletero/cedulaFletero/" . $archivoCedula;
+      move_uploaded_file($archivoCedulaTemp, $rutaCedula);
 
-                //IMAGEN SEGURO
-                $archivoSeguro=$_FILES['seguro']['name'];
-                $archivoSeguroTemp=$_FILES['seguro']['tmp_name'];
-                $rutaSeguro="../imagenesFletero/seguro/".$archivoSeguro;
-                move_uploaded_file($archivoSeguroTemp, $rutaSeguro);
+      //IMAGEN VEHÍCULO
+      $archivoVehiculo = $_FILES['vehiculoVehiculo']['name'];
+      $archivoVehiculoTemp = $_FILES['vehiculoVehiculo']['tmp_name'];
+      $rutaVehiculo = "../imagenesFletero/vehiculoVehiculo/" . $archivoVehiculo;
+      move_uploaded_file($archivoVehiculoTemp, $rutaVehiculo);
 
-                //IMAGEN VEHÍCULO
-                $archivoVehiculo=$_FILES['vehiculo']['name'];
-                $archivoVehiculoTemp=$_FILES['vehiculo']['tmp_name'];
-                $rutaVehiculo="../imagenesFletero/vehiculo/".$archivoVehiculo;
-                move_uploaded_file($archivoVehiculoTemp, $rutaVehiculo);
+      //IMAGEN SEGURO
+      $archivoSeguro = $_FILES['seguroVehiculo']['name'];
+      $archivoSeguroTemp = $_FILES['seguroVehiculo']['tmp_name'];
+      $rutaSeguro = "../imagenesFletero/seguroVehiculo/" . $archivoSeguro;
+      move_uploaded_file($archivoSeguroTemp, $rutaSeguro);
 
-                //IMAGEN TITULO
-                $archivoTitulo=$_FILES['titulo']['name'];
-                $archivoTituloTemp=$_FILES['titulo']['tmp_name'];
-                $rutaTitulo="../imagenesFletero/titulo/".$archivoTitulo;
-                move_uploaded_file($archivoTituloTemp, $rutaTitulo);
+      //IMAGEN TITULO
+      $archivoTitulo = $_FILES['tituloVehiculo']['name'];
+      $archivoTituloTemp = $_FILES['tituloVehiculo']['tmp_name'];
+      $rutaTitulo = "../imagenesFletero/tituloVehiculo/" . $archivoTitulo;
+      move_uploaded_file($archivoTituloTemp, $rutaTitulo);
 
-                //TIPO DE VEHÍCULO: SELECT
-                $tipoVehiculo = $_POST['tipoVehiculo'];
+      //TIPO DE VEHÍCULO: SELECT
+      $tipoVehiculo = $_POST['tipoVehiculo'];
 
-                //COLOR VEHICULO
-                $colorVehiculoFletero = $_POST['colorVehiculoFletero'];
-                $descripcionVehiculoFletero = $_POST['descripcionVehiculoFletero'];
+      //COLOR VEHICULO
+      $colorVehiculo = $_POST['colorVehiculo'];
 
-                //DESCRIPCIÓN VEHICULO
-                
-                //EXTRAIGO idCliente de Variables de sesion
-                $idCliente = $_SESSION['idCliente'];
+      //DESCRIPCIONES
+      $descripcionFletero = $_POST['descripcionFletero'];
 
-                //SQL3: SELECT PARA EXTRAER NUMERO DEL CONTADOR DE CANTIDAD DE VEHÍCULOS REGISTRADOS
-                $sql3 = "SELECT * FROM cliente c INNER JOIN fletero f WHERE c.idCliente='$idCliente' ";
-                $res3 = mysqli_query($conexion, $sql3);
-                if ($row3 = $res3->fetch_assoc()) {
-                  $contador = $row3['contador'];
-                  //++ VEHÍCULO REGISTRADO
-                  $contador++;
-                }
-              
-                //SQL1: INSERT DATOS PARA TABLA FLETERO
-                $sql1 = "INSERT INTO fletero(conductor, carnetFletero, cedulaFletero, seguroFletero, vehiculoFletero, tituloFletero, tipoVehiculoFletero, colorVehiculoFletero, descripcionVehiculoFletero, fechaRegFletero, eliminado, contador, idCliente) VALUES('$rutaConductor', '$rutaCarnet', '$rutaCedula', '$rutaSeguro', '$rutaVehiculo', '$rutaTitulo', '$tipoVehiculo', '$colorVehiculoFletero', '$descripcionVehiculoFletero' , NOW(), '0', '$contador' , '$idCliente' ) ";
-                $res1 = mysqli_query($conexion, $sql1);
-                if ($res1) {
-                  //SI LA CARGA FUÉ EXITOSA, EL CLIENTE PASA A SER FLETERO
-                  //POR LO TANTO UPDATE A LA TABLA USUARIO CAMBIANDOLE EL ROL
-                  //SQL2: UPDATE CAMBIO DE ROL TABLA CLIENTES
-                  $slq2 = "UPDATE usuario SET rol='1' WHERE idCliente='$idCliente' ";
-                  $res2 = mysqli_query($conexion, $slq2);
-                ?>
-                    <script type="text/javascript">
-                        alert('Imagen subida con exito !!');
-                    </script>
-                <?php
-                header('location: inicio.php');
-                }else{
-                  ?>
-                      <script type="text/javascript">
-                          alert('NO SE REALIZÓ LA CONSULTA SQL !!');
-                      </script>
-                  <?php
-              }
-            }else{
-                ?>
-                    <script type="text/javascript">
-                        alert('Formulario Incompleto !!');
-                    </script>
-                <?php
-            }
-        }else{
-            ?>
-                <script type="text/javascript">
-                    alert('Formulario Incompleto !!');
-                </script>
-            <?php
+      //DESCRIPCIÓN VEHICULO
+      $descripcionVehiculo = $_POST['descripcionVehiculo'];
+      
+      //SQL1: INSERT DATOS PARA TABLA FLETERO
+      $sql1 = "INSERT INTO fletero(imagenFletero, descripcionFletero, carnetFletero, cedulaFletero, cantidadVehiculosFletero, fechaRegFletero, eliminadoFletero, idCliente) VALUES('$rutaConductor', '$descripcionFletero', '$rutaCarnet', '$rutaCedula', 1, NOW(), 0, '$idCliente' ) ";
+      $res1 = mysqli_query($conexion, $sql1);
+
+      //SI LA CARGA FUÉ EXITOSA, EL CLIENTE PASA A SER FLETERO
+      if ($res1) {
+        //POR LO TANTO UPDATE A LA TABLA USUARIO CAMBIANDOLE EL ROL
+        //SQL2: UPDATE CAMBIO DE ROL TABLA CLIENTES
+        $sql2 = "UPDATE usuario SET rol='1' WHERE idCliente='$idCliente' ";
+        $res2 = mysqli_query($conexion, $sql2);
+        //SQL4: SELECT PARA EXTRAER ID DE FLETERO ACTUAL
+        $sql4 = "SELECT idFletero FROM fletero WHERE (idCliente='$idCliente') AND (eliminadoFletero<1)";
+        $res4 = mysqli_query($conexion, $sql4);
+        if ($row4 = $res4->fetch_assoc()) {
+          $idFletero = $row4['idFletero'];
         }
-    }else{
-    ?>
-        <script type="text/javascript">
-            alert('No se transfirio correctamente la imagen ');
-        </script>
-    <?php
-    $c=1;
-    }
+        //SQL3: INSERT DATOS PARA TABLA VEHICULO
+        $sql3 = "INSERT INTO vehiculo(vehiculoVehiculo, seguroVehiculo, tituloVehiculo, tipoVehiculo, colorVehiculo, descripcionVehiculo, fechaRegVehiculo, eliminadoVehiculo, idFletero) VALUES('$rutaVehiculo', '$rutaSeguro', '$rutaTitulo', '$tipoVehiculo', '$colorVehiculo', '$descripcionVehiculo', NOW(), 0, '$idFletero') ";
+        $res3 = mysqli_query($conexion, $sql3);
 
+        ?>
+        <script>
+          alert('Registro Exitoso !!');
+        </script>
+        <?php
+        sleep(4);
+        session_unset();
+        session_destroy();
+        header('location: inicioSesion.php'); //
+      } else {
+      ?>
+        <script type="text/javascript">
+          alert('NO SE REALIZÓ LA CONSULTA SQL !!');
+        </script>
+      <?php
+      }
+    } else {
+      ?>
+      <script type="text/javascript">
+        alert('Formulario Incompleto !!');
+      </script>
+    <?php
+    }
+  } else {
+    ?>
+    <script type="text/javascript">
+      alert('Formulario Incompleto !!');
+    </script>
+  <?php
+  }
+} else {
+  ?>
+  <script type="text/javascript">
+    //alert('No se transfirio correctamente la imagen ');
+  </script>
+<?php
+}
 ?>
 
 
@@ -154,7 +156,7 @@
   <title>FleteAR</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
-<br>
+  <br>
   <!-- Favicons -->
   <link href="assets/img/favicon.png" rel="icon">
   <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
@@ -182,151 +184,299 @@
 <body>
 
   <!-- ======= Header ======= -->
-  <?php include("template/header.php")?>
+  <?php include("template/header.php") ?>
 
   <!-- ======= Sidebar ======= -->
-  <?php   if($_SESSION['rol'] == 2){
-      include ("./template/adminNav.php");
-    }else if($_SESSION['rol']==1){
-      include ("./template/fleteroNav.php");
-    }else{
-      include ("./template/clienteNav.php");
-    }
+  <?php if ($_SESSION['rol'] == 2) {
+    include("./template/adminNav.php");
+  } else if ($_SESSION['rol'] == 1) {
+    include("./template/fleteroNav.php");
+  } else {
+    include("./template/clienteNav.php");
+  }
   ?>
 
   <main id="main" class="main">
-  
-    
 
     <section class="section dashboard">
-    <div class="container">
+      <div class="container">
         <div class="card mb-3 pb-3">
 
           <div class="card-body">
 
             <div class="pt-4 pb-2">
-              <h5 class="card-title text-center pb-0 fs-4">Registrá tu vehículo</h5>
-              <p class="text-center small">Ingrese su información de su vehículo en el formulario</p>
+              <h5 class="card-title text-center pb-0 fs-4">Conductor</h5>
+              <p class="text-center small">Ingrese la información solicitada del conductor </p>
             </div>
 
             <form class="row g-3 needs-validation" method="POST" enctype="multipart/form-data" novalidate>
+              <!--DATOS DEL CONDUCTOR-->
+              <div class="col-6">
+                <label for="imagenFletero" class="form-label">Foto del Conductor</label>
+                <div class="profile-img">
+                  <img src="../img/imgPerfil.png" alt="imagenFleteroPrev" id="imagenFleteroPrev" />
+                  <div class="file btn btn-lg btn-primary">
+                    Subir Imagen
+                    <input require type="file" name="imagenFletero" id="imagenFletero" accept="image/*" />
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-6">
+                <label for="carnetFletero" class="form-label">Carnet de Conducir</label>
+                <div class="cuadrado-img">
+                  <img src="../img/imgCarnet.png" alt="carnetFleteroPrev" id="carnetFleteroPrev" />
+                  <div class="file btn btn-lg btn-primary">
+                    Subir Imagen
+                    <input require type="file" name="carnetFletero" id="carnetFletero" accept="image/*" />
+                  </div>
+                </div>
+              </div>
 
               <div class="col-4">
-                <label for="conductor" class="form-label">Foto del Conductor</label>
+                <label for="descripcionFletero" class="form-label">Descripción del Conductor</label>
                 <div class="input-group has-validation">
-                  <input class="form-control" maxlength="256" placeholder="Imagen" name="conductor" id="conductor" type="file" accept="image/jpeg, image/gif, image/png" />
-                  <input type="hidden" class="form-control" name="imagenactual" id="imagenactual">
-                  <div class="invalid-feedback">Subir archivo</div>
+                  <input require type="text" class="form-control" name="descripcionFletero" id="descripcionFletero">
+                  <div class="invalid-feedback">Ingrese una descripcion</div>
                 </div>
-                <img src="" width="150px" height="120px" id="img" alt="Foto del conductor">
+              </div>
+              <div class="col-2"></div>
+
+              <div class="col-6">
+                <label for="cedulaFletero" class="form-label">Cedula de Conductor</label>
+                <div class="cuadrado-img">
+                  <img src="../img/imgCarnet.png" alt="cedulaFleteroPrev" id="cedulaFleteroPrev" />
+                  <div class="file btn btn-lg btn-primary">
+                    Subir Imagen
+                    <input require type="file" name="cedulaFletero" id="cedulaFletero" accept="image/*" />
+                  </div>
+                </div>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+              </div>
+
+              <!--DATOS DEL VEHICULO-->
+              <div class="pt-4 pb-2">
+                <h5 class="card-title text-center pb-0 fs-4">Registrá tu vehículo</h5>
+                <p class="text-center small">Ingrese su información de su vehículo en el formulario</p>
+              </div>
+
+              <div class="col-4">
+                <label for="vehiculoVehiculo" class="form-label">Foto del Vehiculo</label>
+                <div class="vehiculo-img">
+                  <img src="../img/imgVehiculo.png" alt="vehiculoVehiculoPrev" id="vehiculoVehiculoPrev" />
+                  <div class="file btn btn-lg btn-primary">
+                    Subir Imagen
+                    <input require type="file" name="vehiculoVehiculo" id="vehiculoVehiculo" accept="image/*" />
+                  </div>
+                </div>
               </div>
               <div class="col-4">
-                <label for="carnet" class="form-label">Foto de Carnet de Conducir</label>
-                <div class="input-group has-validation">
-                  <input class="form-control" maxlength="256" placeholder="Imagen" name="carnet" id="carnet" type="file" accept="image/jpeg, image/gif, image/png" />
-                  <input type="hidden" class="form-control" name="imagenactual" id="imagenactual">
-                  <div class="invalid-feedback">Subir archivo</div>
+                <label for="seguroVehiculo" class="form-label">Seguro del Vehiculo</label>
+                <div class="vehiculo-img">
+                  <img src="../img/imgTitulo.png" alt="seguroVehiculoPrev" id="seguroVehiculoPrev" />
+                  <div class="file btn btn-lg btn-primary">
+                    Subir Imagen
+                    <input require type="file" name="seguroVehiculo" id="seguroVehiculo" accept="image/*" />
+                  </div>
                 </div>
-                <img src="" width="150px" height="120px" id="imagenmuestra" alt="carnet">
               </div>
               <div class="col-4">
-                <label for="cedula" class="form-label">Foto de la Cedula</label>
-                <div class="input-group has-validation">
-                  <input class="form-control" maxlength="256" placeholder="Imagen" name="cedula" id="cedula" type="file" accept="image/jpeg, image/gif, image/png" />
-                  <input type="hidden" class="form-control" name="imagenactual" id="imagenactual">
-                  <div class="invalid-feedback">Subir archivo</div>
+                <label for="tituloVehiculo" class="form-label">Titulo del Vehiculo</label>
+                <div class="vehiculo-img">
+                  <img src="../img/imgTitulo.png" alt="tituloVehiculoPrev" id="tituloVehiculoPrev" />
+                  <div class="file btn btn-lg btn-primary">
+                    Subir Imagen
+                    <input type="file" name="tituloVehiculo" id="tituloVehiculo" accept="image/*" />
+                  </div>
                 </div>
-                <img src="" width="150px" height="120px" id="imagenmuestra" alt="cedula">
+              </div>
+
+
+
+
+
+              <div class="col-4">
+                <label for="tipoVehiculo" class="form-label">Tipo de Vehículo</label>
+                <select require name="tipoVehiculo" id="tipoVehiculo" class="form-select">
+                  <option value="">Seleccionar</option>
+                  <option value="0">Auto</option>
+                  <option value="1">Camioneta</option>
+                  <option value="2">Camion</option>
+                  <option value="3">Traffic</option>
+                  <option value="4">Moto</option>
+                  <option value="5">Bicicleta</option>
+                </select>
+                <div class="invalid-feedback">Ingrese su sexo.</div>
               </div>
               <div class="col-4">
-                <label for="seguro" class="form-label">Foto del Seguro</label>
+                <label for="colorVehiculo" class="form-label">Color del Vehículo</label>
                 <div class="input-group has-validation">
-                  <input class="form-control" maxlength="256" placeholder="Imagen" name="seguro" id="seguro" type="file" accept="image/jpeg, image/gif, image/png" />
-                  <input type="hidden" class="form-control" name="imagenactual" id="imagenactual">
-                  <div class="invalid-feedback">Subir archivo</div>
-                </div>
-                <img src="" width="150px" height="120px" id="imagenmuestra" alt="seguro">
-              </div>
-              <div class="col-4">
-                <label for="vehiculo" class="form-label">Foto del Vehículo</label>
-                <div class="input-group has-validation">
-                  <input class="form-control" maxlength="256" placeholder="Imagen" name="vehiculo" id="vehiculo" type="file" accept="image/jpeg, image/gif, image/png" />
-                  <input type="hidden" class="form-control" name="imagenactual" id="imagenactual">
-                  <div class="invalid-feedback">Subir archivo</div>
-                </div>
-                <img src="" width="150px" height="120px" id="imagenmuestra" alt="vehiculo">
-              </div>
-              <div class="col-4">
-                <label for="titulo" class="form-label">Foto del Titulo del Vehículo</label>
-                <div class="input-group has-validation">
-                  <input class="form-control" maxlength="256" placeholder="Imagen" name="titulo" id="titulo" type="file" accept="image/jpeg, image/gif, image/png" />
-                  <input type="hidden" class="form-control" name="imagenactual" id="imagenactual">
-                  <div class="invalid-feedback">Subir archivo</div>
-                </div>
-                <img src="" width="150px" height="120px" id="imagenmuestra" alt="titulo">
-              </div>
-              <div class="col-4">
-                      <label for="tipoVehiculo" class="form-label">Tipo de Vehículo</label>
-                      <select require name="tipoVehiculo" id="tipoVehiculo" class="form-select">
-                      <option value="">Seleccionar</option>
-                      <option value="0">Auto</option>
-                      <option value="1">Camioneta</option>
-                      <option value="2">Camion</option>
-                      <option value="3">Traffic</option>
-                      <option value="4">Moto</option>
-                      <option value="5">Bicicleta</option>
-                      </select>
-                      <div class="invalid-feedback">Ingrese su sexo.</div>
-                </div>
-                <div class="col-4">
-                <label for="color" class="form-label">Color del Vehículo</label>
-                <div class="input-group has-validation">
-                  <input type="text" class="form-control" name="color" id="color">
+                  <input require type="text" class="form-control" name="colorVehiculo" id="colorVehiculo">
                   <div class="invalid-feedback">Ingrese el color</div>
                 </div>
               </div>
               <div class="col-4">
-                <label for="descripcion" class="form-label">Descripción del Vehículo</label>
+                <label for="descripcionVehiculo" class="form-label">Descripción del Vehículo</label>
                 <div class="input-group has-validation">
-                  <input type="text" class="form-control" name="descripcion" id="descripcion">
+                  <input require type="text" class="form-control" name="descripcionVehiculo" id="descripcionVehiculo">
                   <div class="invalid-feedback">Ingrese una descripcion</div>
                 </div>
               </div>
-              
-
               <div class="col-12 d-flex align-items-center justify-content-center">
                 <div style='color:red'>
                   <?php
-                 
-                    echo $error;
-                  ?> 
-                  </div>
+                  echo $error;
+                  ?>
+                </div>
+              </div>
+              <div class="pt-4 pb-2">
+                <p class="text-start bold"><a style="color: red;">ATENCIÓN:</a> Una vez registrado tendrás que volver a iniciar sesión.</p>
               </div>
               <div class="col-12 d-flex align-items-center justify-content-center">
-                <button class="btn btn-primary w-50" type="submit" name="submit">Registrar Vehículo</button>
+                <button class="btn btn-primary w-50" type="submit" name="submit">Registrar Información</button>
               </div>
             </form>
 
           </div>
         </div>
       </div>
+    </section>
   </main><!-- End #main -->
-  <script>
-  //FUNCIÓN PREVISUALIZAR UNA IMAGEN LUEGO DE CARGARLA / ANTES DE SUBIRLA
-    function readURL(input){
-      if (input.files && input.files[0]) {
-        var reader = new FileReader();
-        reader.onload = function(e) {
-          // Asignamos el atributo src a la tag de imagen
-          $('#img').attr('src', e.target.result);
-        }
-        reader.readAsDataURL(input.files[0]);
-      }
-    }
 
-    // El listener va asignado al input
-    $("#img").change(function() {
-      readURL(this);
+  <script>
+    // Obtener referencia al input y a la imagen
+    const $seleccionArchivos = document.querySelector("#imagenFletero"),
+      $imagenPrevisualizacion = document.querySelector("#imagenFleteroPrev");
+
+    // Escuchar cuando cambie
+    $seleccionArchivos.addEventListener("change", () => {
+      // Los archivos seleccionados, pueden ser muchos o uno
+      const archivos = $seleccionArchivos.files;
+      // Si no hay archivos salimos de la función y quitamos la imagen
+      if (!archivos || !archivos.length) {
+        $imagenPrevisualizacion.src = "";
+        return;
+      }
+      // Ahora tomamos el primer archivo, el cual vamos a previsualizar
+      const primerArchivo = archivos[0];
+      // Lo convertimos a un objeto de tipo objectURL
+      const objectURL = URL.createObjectURL(primerArchivo);
+      // Y a la fuente de la imagen le ponemos el objectURL
+      $imagenPrevisualizacion.src = objectURL;
+    });
+
+
+    // Obtener referencia al input y a la imagen
+    const $seleccionArchivosCarnet = document.querySelector("#carnetFletero"),
+      $imagenPrevisualizacionCarnet = document.querySelector("#carnetFleteroPrev");
+
+    // Escuchar cuando cambie
+    $seleccionArchivosCarnet.addEventListener("change", () => {
+      // Los archivos seleccionados, pueden ser muchos o uno
+      const archivos = $seleccionArchivosCarnet.files;
+      // Si no hay archivos salimos de la función y quitamos la imagen
+      if (!archivos || !archivos.length) {
+        $imagenPrevisualizacionCarnet.src = "";
+        return;
+      }
+      // Ahora tomamos el primer archivo, el cual vamos a previsualizar
+      const primerArchivo = archivos[0];
+      // Lo convertimos a un objeto de tipo objectURL
+      const objectURL = URL.createObjectURL(primerArchivo);
+      // Y a la fuente de la imagen le ponemos el objectURL
+      $imagenPrevisualizacionCarnet.src = objectURL;
+    });
+
+    // Obtener referencia al input y a la imagen
+    const $seleccionArchivosCedula = document.querySelector("#cedulaFletero"),
+      $imagenPrevisualizacionCedula = document.querySelector("#cedulaFleteroPrev");
+
+    // Escuchar cuando cambie
+    $seleccionArchivosCedula.addEventListener("change", () => {
+      // Los archivos seleccionados, pueden ser muchos o uno
+      const archivos = $seleccionArchivosCedula.files;
+      // Si no hay archivos salimos de la función y quitamos la imagen
+      if (!archivos || !archivos.length) {
+        $imagenPrevisualizacionCedula.src = "";
+        return;
+      }
+      // Ahora tomamos el primer archivo, el cual vamos a previsualizar
+      const primerArchivo = archivos[0];
+      // Lo convertimos a un objeto de tipo objectURL
+      const objectURL = URL.createObjectURL(primerArchivo);
+      // Y a la fuente de la imagen le ponemos el objectURL
+      $imagenPrevisualizacionCedula.src = objectURL;
+    });
+
+    // Obtener referencia al input y a la imagen
+    const $seleccionArchivosVehiculo = document.querySelector("#vehiculoVehiculo"),
+      $imagenPrevisualizacionVehiculo = document.querySelector("#vehiculoVehiculoPrev");
+
+    // Escuchar cuando cambie
+    $seleccionArchivosVehiculo.addEventListener("change", () => {
+      // Los archivos seleccionados, pueden ser muchos o uno
+      const archivos = $seleccionArchivosVehiculo.files;
+      // Si no hay archivos salimos de la función y quitamos la imagen
+      if (!archivos || !archivos.length) {
+        $imagenPrevisualizacionVehiculo.src = "";
+        return;
+      }
+      // Ahora tomamos el primer archivo, el cual vamos a previsualizar
+      const primerArchivo = archivos[0];
+      // Lo convertimos a un objeto de tipo objectURL
+      const objectURL = URL.createObjectURL(primerArchivo);
+      // Y a la fuente de la imagen le ponemos el objectURL
+      $imagenPrevisualizacionVehiculo.src = objectURL;
+    });
+
+    // Obtener referencia al input y a la imagen
+    const $seleccionArchivosSeguro = document.querySelector("#seguroVehiculo"),
+      $imagenPrevisualizacionSeguro = document.querySelector("#seguroVehiculoPrev");
+
+    // Escuchar cuando cambie
+    $seleccionArchivosSeguro.addEventListener("change", () => {
+      // Los archivos seleccionados, pueden ser muchos o uno
+      const archivos = $seleccionArchivosSeguro.files;
+      // Si no hay archivos salimos de la función y quitamos la imagen
+      if (!archivos || !archivos.length) {
+        $imagenPrevisualizacionSeguro.src = "";
+        return;
+      }
+      // Ahora tomamos el primer archivo, el cual vamos a previsualizar
+      const primerArchivo = archivos[0];
+      // Lo convertimos a un objeto de tipo objectURL
+      const objectURL = URL.createObjectURL(primerArchivo);
+      // Y a la fuente de la imagen le ponemos el objectURL
+      $imagenPrevisualizacionSeguro.src = objectURL;
+    });
+
+    // Obtener referencia al input y a la imagen
+    const $seleccionArchivosTitulo = document.querySelector("#tituloVehiculo"),
+      $imagenPrevisualizacionTitulo = document.querySelector("#tituloVehiculoPrev");
+
+    // Escuchar cuando cambie
+    $seleccionArchivosTitulo.addEventListener("change", () => {
+      // Los archivos seleccionados, pueden ser muchos o uno
+      const archivos = $seleccionArchivosTitulo.files;
+      // Si no hay archivos salimos de la función y quitamos la imagen
+      if (!archivos || !archivos.length) {
+        $imagenPrevisualizacionTitulo.src = "";
+        return;
+      }
+      // Ahora tomamos el primer archivo, el cual vamos a previsualizar
+      const primerArchivo = archivos[0];
+      // Lo convertimos a un objeto de tipo objectURL
+      const objectURL = URL.createObjectURL(primerArchivo);
+      // Y a la fuente de la imagen le ponemos el objectURL
+      $imagenPrevisualizacionTitulo.src = objectURL;
     });
   </script>
 

@@ -36,7 +36,7 @@
           </li>
 
           <li>
-            <a class="dropdown-item d-flex align-items-center" href="usuarios-perfil.php">
+            <a class="dropdown-item d-flex align-items-center" href="perfil.php">
               <i class="bi bi-person"></i>
               <span>Mi Perfil</span>
             </a>

@@ -7,7 +7,7 @@ if (!isset($_SESSION['usuario'])) {
 }
 
 $idCliente = $_SESSION['idCliente'];
-//SELECT PARA VERIFICAR ROL POR LAS DUDAS NOA ACTUALIZA EL DE LA VARIABLE SESSION
+//SELECT PARA VERIFICAR ROL POR LAS DUDAS NO ACTUALIZA EL ID DE LA VARIABLE SESSION
 $sql2 = "SELECT * FROM usuario WHERE idCliente='$idCliente' ";
 $res2 = mysqli_query($conexion, $sql2);
 if ($row2 = $res2->fetch_assoc()) {
@@ -96,8 +96,8 @@ if ($rol == 0) {
             <div class="col mt-3">
               <div class="card" style="width: 18rem;">
                 <img class="card-img-top" src="<?php echo $row1['vehiculoFletero'] ?>" alt="Vehículo del Fletero">
-                <div class="card-body">
-                  <h5 class="card-title text-center">Vehículo <?php echo $contador ?></h5>
+                <div class="card-body fleteroVehiculo">
+                  <h5 class="card-title text-center"><?php echo $contador ?></h5>
                   <?php
                   if ($row1['tipoVehiculoFletero'] == 0) {
                     $tipoVehiculoFletero = "Auto";
@@ -118,7 +118,9 @@ if ($rol == 0) {
                   <p>Tipo: <?php echo $tipoVehiculoFletero ?></p>
                   <p>Color: <?php echo $row1['colorVehiculoFletero'] ?></p>
                   <p>Descripción: <?php echo $row1['descripcionVehiculoFletero'] ?></p>
-                  <a href="#" class="btn btn-primary center-block">Modificar</a>
+                  <div class="col mt-6 text-center">
+                  <a href="#" class="btn btn-primary center-block col-md-6">Modificar</a>
+                  </div>
                 </div>
               </div>
             </div>
