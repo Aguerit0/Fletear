@@ -8,7 +8,6 @@ if (!isset($_SESSION['usuario'])) {
 }
 
 $error = "";
-$c = 0;
 
 
 //AUTOMATIZAR SUBIDA DE IMAGENES
@@ -32,8 +31,8 @@ $c = 0;
   <?php
   } */
 
-
-
+//EXTRAIGO idCliente de Variables de sesion
+$idCliente = $_SESSION['idCliente'];
 
 if (isset($_POST['submit'])) {
   $contador = 0;
@@ -83,13 +82,10 @@ if (isset($_POST['submit'])) {
 
       //DESCRIPCIONES
       $descripcionFletero = $_POST['descripcionFletero'];
-      $descripcionVehiculo = $_POST['descripcionVehiculo'];
 
       //DESCRIPCIÓN VEHICULO
-
-      //EXTRAIGO idCliente de Variables de sesion
-      $idCliente = $_SESSION['idCliente'];
-
+      $descripcionVehiculo = $_POST['descripcionVehiculo'];
+      
       //SQL1: INSERT DATOS PARA TABLA FLETERO
       $sql1 = "INSERT INTO fletero(imagenFletero, descripcionFletero, carnetFletero, cedulaFletero, cantidadVehiculosFletero, fechaRegFletero, eliminadoFletero, idCliente) VALUES('$rutaConductor', '$descripcionFletero', '$rutaCarnet', '$rutaCedula', 1, NOW(), 0, '$idCliente' ) ";
       $res1 = mysqli_query($conexion, $sql1);
@@ -98,14 +94,27 @@ if (isset($_POST['submit'])) {
       if ($res1) {
         //POR LO TANTO UPDATE A LA TABLA USUARIO CAMBIANDOLE EL ROL
         //SQL2: UPDATE CAMBIO DE ROL TABLA CLIENTES
-        $slq2 = "UPDATE usuario SET rol='1' WHERE idCliente='$idCliente' ";
-        $res2 = mysqli_query($conexion, $slq2);
-?>
-        <script type="text/javascript">
-          alert('Imagen subida con exito !!');
+        $sql2 = "UPDATE usuario SET rol='1' WHERE idCliente='$idCliente' ";
+        $res2 = mysqli_query($conexion, $sql2);
+        //SQL4: SELECT PARA EXTRAER ID DE FLETERO ACTUAL
+        $sql4 = "SELECT idFletero FROM fletero WHERE (idCliente='$idCliente') AND (eliminadoFletero<1)";
+        $res4 = mysqli_query($conexion, $sql4);
+        if ($row4 = $res4->fetch_assoc()) {
+          $idFletero = $row4['idFletero'];
+        }
+        //SQL3: INSERT DATOS PARA TABLA VEHICULO
+        $sql3 = "INSERT INTO vehiculo(vehiculoVehiculo, seguroVehiculo, tituloVehiculo, tipoVehiculo, colorVehiculo, descripcionVehiculo, fechaRegVehiculo, eliminadoVehiculo, idFletero) VALUES('$rutaVehiculo', '$rutaSeguro', '$rutaTitulo', '$tipoVehiculo', '$colorVehiculo', '$descripcionVehiculo', NOW(), 0, '$idFletero') ";
+        $res3 = mysqli_query($conexion, $sql3);
+
+        ?>
+        <script>
+          alert('Registro Exitoso !!');
         </script>
-      <?php
-        header('location: inicio.php');//
+        <?php
+        sleep(4);
+        session_unset();
+        session_destroy();
+        header('location: inicioSesion.php'); //
       } else {
       ?>
         <script type="text/javascript">
@@ -113,15 +122,6 @@ if (isset($_POST['submit'])) {
         </script>
       <?php
       }
-      //SQL4: SELECT PARA EXTRAER ID DE FLETERO ACTUAL
-      $sql4 = "SELECT idFletero WHERE (idCliente='$idCliente') AND (eliminadoFletero<1)";
-      $res4 = mysqli_query($conexion, $sql4);
-      if ($row4 = $res4->fetch_assoc()) {
-        $idFletero = $row4['idFletero'];
-      }
-      //SQL3: INSERT DATOS PARA TABLA VEHICULO
-      $sql3 = "INSERT INTO vehiculo(vehiculoVehiculo, seguroVehiculo, tituloVehiculo, tipoVehiculo, colorVehiculo, descripcionVehiculo, fechaRegVehiculo, eliminadoVehiculo, idFletero) VALUES('$rutaVehiculo', '$rutaSeguro', '$rutaTitulo', '$tipoVehiculo', '$colorVehiculo', '$descripcionVehiculo', NOW(), 0, '$idFletero') ";
-      $res3 = mysqli_query($conexion, $sql3);
     } else {
       ?>
       <script type="text/javascript">
@@ -142,9 +142,7 @@ if (isset($_POST['submit'])) {
     //alert('No se transfirio correctamente la imagen ');
   </script>
 <?php
-  $c = 1;
 }
-
 ?>
 
 
@@ -338,6 +336,9 @@ if (isset($_POST['submit'])) {
                   echo $error;
                   ?>
                 </div>
+              </div>
+              <div class="pt-4 pb-2">
+                <p class="text-start bold"><a style="color: red;">ATENCIÓN:</a> Una vez registrado tendrás que volver a iniciar sesión.</p>
               </div>
               <div class="col-12 d-flex align-items-center justify-content-center">
                 <button class="btn btn-primary w-50" type="submit" name="submit">Registrar Información</button>

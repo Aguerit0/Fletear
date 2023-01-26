@@ -1,4 +1,5 @@
 <?php
+  
   include 'conexion.php';
   session_start();
   // PREGUNTA SI HAY UN USUARIO REGISTRADO
