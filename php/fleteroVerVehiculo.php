@@ -101,7 +101,7 @@ if ($rol == 0) {
           ?>
             <div class="col md-3">
               <div class="card" style="width: 18rem;">
-                <img class="card-img-top" src="<?php echo $row1['vehiculoVehiculo'] ?>" alt="Vehículo del Fletero">
+                <img class="card-img-top" src="<?php echo $row2['vehiculoVehiculo'] ?>" alt="Vehículo del Fletero">
                 <div class="card-body Vehiculo">
                   <h5 class="card-title text-center"><?php echo $contador ?></h5>
                   <?php
@@ -120,12 +120,14 @@ if ($rol == 0) {
                   } else {
                     $tipoVehiculo = " ";
                   }
+                  //EXTRAIGO 'idVehiculo' PARA ENVIARLO EN EL BOTON
+                  $idVehiculo = $row2['idVehiculo'];
                   ?>
                   <p><b>Tipo:</b> <?php echo $tipoVehiculo ?></p>
                   <p><b>Color:</b> <?php echo $row2['colorVehiculo'] ?></p>
                   <p><b>Descripción:</b> <?php echo $row2['descripcionVehiculo'] ?></p>
                   <div class="col md-3 text-center">
-                  <button class="btn btn-primary w-50" type="submit" name="editar">Editar</button>
+                  <a href="fleteroEditarVehiculo.php?idVehiculo=<?php echo $idVehiculo;?>" class="btn btn-primary w-50" type="submit" name="editar">Editar</a>
                   </div>
                 </div>
               </div>
