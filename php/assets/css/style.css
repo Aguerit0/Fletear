@@ -1739,7 +1739,7 @@ div.card-body.fleteroVehiculo{
 
 /* INPUT AGREGAR IMAGEN DE VEHICULO  'clienteRegistrarseFletero' */
 .vehiculo-img {
-  width: 200px; /* alto y ancho específico para que el círculo sea redondo */
+  width: 160px; /* alto y ancho específico para que el círculo sea redondo */
   height: 200px;
   border-radius: 0%; 
   overflow: hidden; /* oculta todo el contenido fuera de la caja */

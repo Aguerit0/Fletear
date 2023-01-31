@@ -7,7 +7,7 @@ if (!isset($_SESSION['usuario'])) {
 }
 
 $idCliente = $_SESSION['idCliente'];
-$eliminadoCliente="";
+$eliminadoCliente=0;
 $contadorWhile = 0;
 //SELECT PARA VERIFICAR ROL POR LAS DUDAS NOA ACTUALIZA EL DE LA VARIABLE SESSION
 $sql2 = "SELECT * FROM usuario WHERE idCliente='$idCliente' ";

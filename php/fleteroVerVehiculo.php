@@ -17,9 +17,15 @@ if ($rol == 0) {
   //ROL: CLIENTE
 } elseif ($rol == 1) {
   //ROL: FLETERO
-  //SQL1: CONSULTA PARA EXTRAER IMAGENES E INFO DE TABLA FLETERO
-  $sql1 = "SELECT * FROM fletero WHERE idCliente='$idCliente' AND eliminado<1  ";
+  //SQL1: CONSULTA PARA EXTRAER IDFLETERO
+  $sql1 = "SELECT idFletero FROM fletero WHERE idCliente='$idCliente'";
   $res1 = mysqli_query($conexion, $sql1);
+  if ($row1 = $res1->fetch_assoc()) {
+    $idFletero = $row1['idFletero'];
+  }
+  //SQL2: CONSULTA PARA EXTRAER INFORMACIÓN DE TABLA VEHICULOS
+  $sql2 = "SELECT * FROM vehiculo WHERE idFletero='$idFletero'";
+  $res2 = mysqli_query($conexion, $sql2);
 } else {
   //ROL: ADMINISTRADOR
 }
@@ -84,42 +90,42 @@ if ($rol == 0) {
       <div class="container">
 
         <div class="section-title">
-          <h2>Mis Vehículos</h2>
+          <h2>Mis Vehículos <a href="fleteroAgregarVehiculo.php" class="btn btn-success text-end" type="submit" name="nuebo">Nuevo</a></h2>
           <p>Información sobre mis vehículos</p>
         </div>
         <!--CARDS-->
         <div class="card-group mt-3">
           <?php
           $contador = 1;
-          while ($row1 = $res1->fetch_assoc()) {
+          while ($row2 = $res2->fetch_assoc()) {
           ?>
-            <div class="col mt-3">
+            <div class="col md-3">
               <div class="card" style="width: 18rem;">
-                <img class="card-img-top" src="<?php echo $row1['vehiculoFletero'] ?>" alt="Vehículo del Fletero">
-                <div class="card-body fleteroVehiculo">
+                <img class="card-img-top" src="<?php echo $row1['vehiculoVehiculo'] ?>" alt="Vehículo del Fletero">
+                <div class="card-body Vehiculo">
                   <h5 class="card-title text-center"><?php echo $contador ?></h5>
                   <?php
-                  if ($row1['tipoVehiculoFletero'] == 0) {
-                    $tipoVehiculoFletero = "Auto";
-                  } elseif ($row1['tipoVehiculoFletero'] == 1) {
-                    $tipoVehiculoFletero = "Camioneta";
-                  } elseif ($row1['tipoVehiculoFletero'] == 2) {
-                    $tipoVehiculoFletero = "Camion";
-                  } elseif ($row1['tipoVehiculoFletero'] == 3) {
-                    $tipoVehiculoFletero = "Traffic";
-                  } elseif ($row1['tipoVehiculoFletero'] == 4) {
-                    $tipoVehiculoFletero = "Moto";
-                  } elseif ($row1['tipoVehiculoFletero'] == 5) {
-                    $tipoVehiculoFletero = "Bicicleta";
+                  if ($row2['tipoVehiculo'] == 0) {
+                    $tipoVehiculo = "Auto";
+                  } elseif ($row2['tipoVehiculo'] == 1) {
+                    $tipoVehiculo = "Camioneta";
+                  } elseif ($row2['tipoVehiculo'] == 2) {
+                    $tipoVehiculo = "Camion";
+                  } elseif ($row2['tipoVehiculo'] == 3) {
+                    $tipoVehiculo = "Traffic";
+                  } elseif ($row2['tipoVehiculo'] == 4) {
+                    $tipoVehiculo = "Moto";
+                  } elseif ($row2['tipoVehiculo'] == 5) {
+                    $tipoVehiculo = "Bicicleta";
                   } else {
-                    $tipoVehiculoFletero = "";
+                    $tipoVehiculo = " ";
                   }
                   ?>
-                  <p>Tipo: <?php echo $tipoVehiculoFletero ?></p>
-                  <p>Color: <?php echo $row1['colorVehiculoFletero'] ?></p>
-                  <p>Descripción: <?php echo $row1['descripcionVehiculoFletero'] ?></p>
-                  <div class="col mt-6 text-center">
-                  <a href="#" class="btn btn-primary center-block col-md-6">Modificar</a>
+                  <p><b>Tipo:</b> <?php echo $tipoVehiculo ?></p>
+                  <p><b>Color:</b> <?php echo $row2['colorVehiculo'] ?></p>
+                  <p><b>Descripción:</b> <?php echo $row2['descripcionVehiculo'] ?></p>
+                  <div class="col md-3 text-center">
+                  <button class="btn btn-primary w-50" type="submit" name="editar">Editar</button>
                   </div>
                 </div>
               </div>
