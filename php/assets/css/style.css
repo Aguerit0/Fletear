@@ -1778,3 +1778,56 @@ div.card-body.fleteroVehiculo{
 .vehiculo-img .file input :hover {
   cursor: pointer;
 }
+
+
+/* SECCIÓN CARDS TOP 3 FLETEROS 'clienteBuscarFletero.php' */
+.testimonial-card .card-up {
+  height: 120px;
+  overflow: hidden;
+  border-top-left-radius: 0.25rem;
+  border-top-right-radius: 0.25rem;
+  }
+  
+  .testimonial-card .avatar {
+  width: 110px;
+  margin-top: -60px;
+  overflow: hidden;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  }
+
+
+  /* SECCIÓN MOSTRAR TODOS LOS FLETEROS 'clienteBuscarFletero.php' */
+
+.container2{
+  background-color: white;
+}
+.p-t-10 {
+    padding-top: 10px !important;
+}
+.media-main a.pull-left {
+    width: 100px;
+}
+.thumb-lg {
+    height: 84px;
+    width: 84px;
+}
+.media-main .info {
+    overflow: hidden;
+    color: #000;
+}
+.media-main .info h4 {
+    padding-top: 10px;
+    margin-bottom: 5px;
+}
+.social-linksFletero li a {
+    background: #EFF0F4;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    display: inline-block;
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    color: #7A7676;
+}

@@ -28,17 +28,22 @@
         $sql3 = "SELECT * FROM cliente WHERE dniCliente=$dniCliente";
         $res3 = mysqli_query($conexion, $sql3);
         if (mysqli_num_rows($res3)>0) {
-            
+            ?>
+            <script>
+              alertk("Ya existe un usuario registrado con este DNI");
+            </script>
+            <?php
+            sleep(3);
             header('location: registrarse.php');
         }else{
 
 
           //SQL1: INSERTAR CLIENTE
-        $sql1 = "INSERT INTO cliente(nombreCliente, apellidoCliente, correoCliente, dniCliente, domicilioCliente, telefonoCliente, fechaNacCliente, sexoCliente, fechaRegCliente, eliminado) VALUES('$nombreCliente', '$apellidoCliente', '$correoCliente', '$dniCliente', '$domicilioCliente', '$telefonoCliente', '$fechaNacCliente', '$sexoCliente', NOW(), '$eliminadoCliente' )";
+        $sql1 = "INSERT INTO cliente(nombreCliente, apellidoCliente, correoCliente, dniCliente, domicilioCliente, telefonoCliente, fechaNacCliente, sexoCliente, fechaRegCliente, eliminadoCliente) VALUES('$nombreCliente', '$apellidoCliente', '$correoCliente', '$dniCliente', '$domicilioCliente', '$telefonoCliente', '$fechaNacCliente', '$sexoCliente', NOW(), '$eliminadoCliente' )";
         $res1 = mysqli_query($conexion, $sql1);
 
-        //SQL2: OBTENEMOS idCLiente PARA TABLA USUARIO
-        $sql2 = "SELECT idCliente FROM cliente ORDER BY idCliente DESC LIMIT 1";
+        //SQL2: OBTENEMOS 'idCliente' PARA TABLA USUARIO
+        $sql2 = "SELECT idCliente FROM cliente WHERE dniCliente='$dniCliente'";
         $res2 = mysqli_query($conexion,$sql2);
         if($row2 = $res2->fetch_assoc()){
           $idCliente = $row2['idCliente'];
