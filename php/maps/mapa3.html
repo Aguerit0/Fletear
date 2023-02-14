@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      #map {
+        height: 100%;
+      }
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #searchMap {
+        width: 40%;
+        height: 40px;
+        border-color: black;
+        font-size: 20px;
+      }
+      #buttonMyUbi {
+        width: 15%;
+        height: auto;
+        margin-left: 10px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <input type="text" id="searchMap" placeholder="Ingresa una Ubicación" />
+    <input
+      type="submit"
+      id="buttonMyUbi"
+      placeholder="Mi Ubicación"
+      value="Mi Ubicación"
+    />
+    <div id="map"></div>
+
+    <script
+      async
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCyrhhTAE5dCjUWQ9hO9G3GHA85F5k2awY&libraries=places&callback=initMap"
+    ></script>
+
+    <script>
+      const cordsInit = { lat: -28.46957, lng: -65.78524 };
+      const mapDiv = document.getElementById("map");
+      const inputSearchMap = document.getElementById("searchMap");
+      let map, marker, autocomplete;
+
+      //FUNCIÓN INICIAR MAPA
+      function initMap() {
+        map = new google.maps.Map(mapDiv, {
+          center: cordsInit,
+          zoom: 9,
+        });
+        marker = new google.maps.Marker({
+          position: cordsInit,
+          map: map,
+        });
+        initAutocomplete();
+        addLocation(map);
+
+  
+      } //
+
+      //FUNCIÓN PARA AUTOCOMPLETADO DE SEARCH
+      function initAutocomplete() {
+        autocomplete = new google.maps.places.Autocomplete(inputSearchMap);
+        autocomplete.addListener("place_changed", function () {
+          const place = autocomplete.getPlace();
+          map.setCenter(place.geometry.location);
+          marker.setPosition(place.geometry.location);
+        });
+      } //
+
+      
+        //FUNCIÓN PARA AGREGAR UBICACIÓN ACTUAL BOTON
+        function addLocation(map) {
+          infoWindow = new google.maps.InfoWindow();
+          const locationButton = document.createElement("button");
+          locationButton.textContent("Agregar Ubicación Actual");
+          locationButton.classList.add("custom-map-control-button");
+          map.cotrols[google.maps.ControlPosition.TOP_CENTER].push(
+            locationButton
+          );
+          locationButton.addEventListener("click", () => {
+            //TRY HTML5 GEOLOCATION.
+            if (navigator.geolocation) {
+              navigator.geolocation.getCurrentPosition(
+                (position) => {
+                  const pos = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude,
+                  };
+                  infoWindows.setPosition(pos);
+                  infoWindows.setContent("Location Found.");
+                  infoWindows.open(map);
+                  map.setCenter(pos);
+                },
+                () => {
+                  hadleLocationError(true, infoWindows, map.getCenter());
+                }
+              );
+            } else {
+              //EL NAVEGADOR NO SOPORTA LA GEOLOCALIZACIÓN
+              hadleLocationError(false, infoWindows, map.getCenter());
+            }
+          });
+        } //
+        //FUNCIÓN ERROR
+        function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+          infoWindow.setPosition(pos);
+          infoWindow.setContent(
+            browserHasGeolocation
+              ? "Error: The Geolocation service failed."
+              : "Error: Your browser doesn't support geolocation."
+          );
+          infoWindow.open(map);
+        }//
+    </script>
+  </body>
+</html>

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      #map {
+        height: 100%;
+      }
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <label for="direccion1">Dirección 1:</label>
+      <input type="text" id="direccion1" />
+    </div>
+    <div>
+      <label for="direccion2">Dirección 2:</label>
+      <input type="text" id="direccion2" />
+    </div>
+    <button onclick="calcularDistancia()">Calcular distancia</button>
+
+    <div id="map"></div>
+      <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCyrhhTAE5dCjUWQ9hO9G3GHA85F5k2awY&libraries=places,geometry"></script>
+    <script>
+      var map;
+      var marker1, marker2;
+      function initMap() {
+  // crea el mapa y centra en una ubicación predeterminada
+  map = new google.maps.Map(document.getElementById('map'), {
+    center: {lat: -34.603722, lng: -58.381592},
+    zoom: 12
+  });
+
+  // crea el objeto de autocompletado para el primer input
+  var autocomplete1 = new google.maps.places.Autocomplete(document.getElementById('direccion1'));
+
+  // crea el objeto de autocompletado para el segundo input
+  var autocomplete2 = new google.maps.places.Autocomplete(document.getElementById('direccion2'));
+
+  // crea los marcadores y los hace draggable
+  marker1 = new google.maps.Marker({
+    map: map,
+    draggable: true
+  });
+
+  marker2 = new google.maps.Marker({
+    map: map,
+    draggable: true
+  });
+
+  // cuando se completa la dirección en el primer input, agrega el marcador 1
+  autocomplete1.addListener('place_changed', function() {
+    var place = autocomplete1.getPlace();
+    if (!place.geometry) {
+      alert("La dirección no es válida");
+      return;
+    }
+    marker1.setPosition(place.geometry.location);
+    map.setCenter(place.geometry.location);
+  });
+
+  // cuando se completa la dirección en el segundo input, agrega el marcador 2
+  autocomplete2.addListener('place_changed', function() {
+    var place = autocomplete2.getPlace();
+    if (!place.geometry) {
+      alert("La dirección no es válida");
+      return;
+    }
+    marker2.setPosition(place.geometry.location);
+    map.setCenter(place.geometry.location);
+  });
+
+
+
+        // Evento para actualizar la posición del marcador al arrastrarlo
+        google.maps.event.addListener(marker1, "dragend", function () {
+          var latlng = marker1.getPosition();
+          console.log("Nueva ubicación: " + latlng.lat() + ", " + latlng.lng());
+        });
+
+        agregarEventos();
+    }
+
+      function agregarEventos() {
+        var geocoder = new google.maps.Geocoder();
+        document
+          .getElementById("direccion1")
+          .addEventListener("keypress", function (e) {
+            if (e.key === "Enter") {
+              var address = document.getElementById("direccion1").value;
+              geocodeAddress(geocoder, address, function (location) {
+                // Agrega un nuevo marcador arrastrable en la ubicación obtenida
+                if (marker1) marker1.setMap(null);
+                marker1 = new google.maps.Marker({
+                  position: location,
+                  map: map,
+                  draggable: true,
+                });
+              });
+            }
+          });
+        document
+          .getElementById("direccion2")
+          .addEventListener("keypress", function (e) {
+            if (e.key === "Enter") {
+              var address = document.getElementById("direccion2").value;
+              geocodeAddress(geocoder, address, function (location) {
+                // Agrega un nuevo marcador arrastrable en la ubicación obtenida
+                if (marker2) marker2.setMap(null);
+                marker2 = new google.maps.Marker({
+                  position: location,
+                  map: map,
+                  draggable: true,
+                });
+              });
+            }
+          });
+      }
+
+      function geocodeAddress(geocoder, address, callback) {
+        geocoder.geocode({ address: address }, function (results, status) {
+          if (status === "OK") {
+            callback(results[0].geometry.location);
+          } else {
+            alert(
+              "Geocode was not successful for the following reason: " + status
+            );
+          }
+        });
+      }
+
+      function calcularDistancia() {
+  var direccion1 = document.getElementById('direccion1').value;
+  var direccion2 = document.getElementById('direccion2').value;
+
+  // verifica que se hayan ingresado las dos direcciones
+  if (!direccion1 || !direccion2) {
+    alert('Por favor ingrese ambas direcciones');
+    return;
+  }
+
+  var geocoder = new google.maps.Geocoder();
+
+  // Geocodifica la primera dirección
+  geocoder.geocode({'address': direccion1}, function(results, status) {
+    if (status === 'OK') {
+      var position1 = results[0].geometry.location;
+
+      // Geocodifica la segunda dirección
+      geocoder.geocode({'address': direccion2}, function(results, status) {
+        if (status === 'OK') {
+          var position2 = results[0].geometry.location;
+
+          // calcula la distancia entre las dos ubicaciones
+          var distance = google.maps.geometry.spherical.computeDistanceBetween(position1, position2);
+
+          var contentString = '<div>' +
+                              '<p>La distancia entre las direcciones es: ' + distance.toFixed(2) + ' metros.</p>' +
+                              '</div>';
+
+          var infowindow = new google.maps.InfoWindow({
+            content: contentString
+          });
+
+          // muestra el mensaje de distancia en un info window al lado del segundo marcador
+          infowindow.open(map, marker2);
+        } else {
+          alert('Geocode no tuvo éxito para la segunda dirección debido a: ' + status);
+        }
+      });
+    } else {
+      alert('Geocode no tuvo éxito para la primera dirección debido a: ' + status);
+    }
+  });
+}
+
+    </script>
+  </body>
+</html>

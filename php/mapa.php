@@ -7,37 +7,10 @@ if (!isset($_SESSION['usuario'])) {
 }
 
 $idCliente = $_SESSION['idCliente'];
-$eliminadoCliente=0;
-$contadorWhile = 0;
-//SELECT PARA VERIFICAR ROL POR LAS DUDAS NO ACTUALIZA EL DE LA VARIABLE SESSION
-$sql2 = "SELECT * FROM usuario WHERE idCliente='$idCliente' ";
-$res2 = mysqli_query($conexion, $sql2);
-if ($row2 = $res2->fetch_assoc()) {
-  $rol = $row2['rol'];
-}
-if ($rol == 0) {
-  //ROL: CLIENTE
-  //SQL1: CONSULTA PARA EXTRAER IMAGENES E INFO DE TABLA FLETERO PARA MOSTRAR TOP 3
-  $sql1 = "SELECT * FROM cliente c INNER JOIN fletero f WHERE (c.eliminadoCliente<1) AND (f.eliminadoFletero<1) AND (c.idCliente=f.idCliente) ORDER BY f.puntajeFletero DESC LIMIT 3";
-  $res1 = mysqli_query($conexion, $sql1);
-  
-} elseif ($rol == 1) {
-  //ROL: FLETERO
-  //SQL1: CONSULTA PARA EXTRAER IMAGENES E INFO DE TABLA FLETERO PARA MOSTRAR TOP 3
-  $sql1 = "SELECT * FROM cliente c INNER JOIN fletero f WHERE (c.eliminadoCliente<1) AND (f.eliminadoFletero<1) AND (c.iCliente=f.idCliente) ORDER BY f.puntajeFletero DESC LIMIT 3";
-  $res1 = mysqli_query($conexion, $sql1);
-
-} else {
-  //ROL: ADMINISTRADOR
-}
 
 
-//CONSULTA
-//$sql2 = "SELECT SQL_CALC_FOUND_ROWS * FROM cliente c INNER JOIN fletero f WHERE (c.eliminadoCliente<1) AND (f.eliminadoFletero<1) AND (c.idCliente=f.idCliente) AND (nombreCliente LIKE '%$campo%' OR apellidoCliente LIKE '%$campo%') ORDER BY f.puntajeFletero DESC";
-//
 
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -77,15 +50,34 @@ if ($rol == 0) {
 
   <link href="assets/css/style.css" rel="stylesheet">
 
-  <!-- Style Search -->
+  <!-- SCRIPT PASAR LAT Y LONG A INPUTS-->
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous">
+  </script>
+
   <style>
-    #searchFleteros {
+    #map {
+        height: 50%;
         width: auto;
+      }
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #searchMap {
+        width: 40%;
         height: 40px;
         border-color: black;
         font-size: 20px;
-        align-items: center;
-        align-content: center;
+      }
+      #buttonMyUbi {
+        width: 15%;
+        height: auto;
+        margin-left: 10px;
+        cursor: pointer;
       }
   </style>
 
@@ -109,30 +101,55 @@ if ($rol == 0) {
   <main id="main" class="main">
     <!-- ======= Resume Section ======= -->
     <section id="resume" class="resume">
-      <div class="container">
-
-        <div class="section-title">
-          <h2>Buscar Fleteros</h2>
-          <p>Top 3 Fleteros</p>
-        </div>
-        <div class="container">
-          <div class="row">
-            <div class="align-center text-center">
-            <input type="text" id="searchFleteros" placeholder="Buscar un Fletero" />
-            </div>
-            <br>
-            <div id="resultado" class="row">
-              <!-- AQUÍ SE DESPLIEGA EL RESULTADO DE LA BUSQUEDA -->
-              
-            </div>
-          </div>
-        </div>
-
+      
+    <input type="text" id="searchMap" placeholder="Ingresa una Ubicación" />
+  <div id="map"></div>
+  <div class="row">
+    <div class="col-6">
+      <h3>Datos de SALIDA</h3>
+      <label for="latitud">
+        Latitud:  
+      </label>
+      <input type="text" id="latitudSalida" style="color:green" value="0"><br>
+      <label for="longitud">
+        Longitud:
+      </label>
+      <input type="text" id="longitudSalida" style="color:green" value="0">
+    </div>  
+    <div class="col-6">
+      <h3>Datos de LLEGADA</h3>
+      <label for="latitud">
+        Latitud:
+      </label>
+      <input type="text" id="latitudLlegada" style="color:red" value="-28.46957"><br>
+      <label for="longitud">
+        Longitud:
+      </label>
+      <input type="text" id="longitudLlegada" style="color:red" value="-65.78524">
+    </div>
+  </div>
+  
+  
+  
+  
 
     </section><!-- End Resume Section -->
   </main><!-- End #main -->
 
 
+<!-- SCRIPT API KEY GOOGLE MAPS API -->
+<script
+    async
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCyrhhTAE5dCjUWQ9hO9G3GHA85F5k2awY&libraries=places&callback=initMap">
+</script>
+
+<!-- SCRIPT BACK API GOOGLE MAPS -->
+<script>
+//FUNCIÓN INICIAR MAPA
+
+
+
+</script>
 
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
